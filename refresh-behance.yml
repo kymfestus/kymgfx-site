@@ -1,0 +1,61 @@
+name: Refresh Behance work
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours (GitHub may delay runs by several minutes)
+  workflow_dispatch:         # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write            # needed to commit the refreshed files
+
+concurrency:
+  group: refresh-behance
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh Behance projects
+        run: python3 tools/refresh-behance.py
+
+      # Gate: if the site fails its own checks, do NOT publish the update.
+      - name: Verify the site
+        run: python3 tools/check-site.py
+
+      - name: Commit only if there is new work
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+
+          # If ONLY portfolio.json changed, make sure the project list itself
+          # changed (not just a "checked at" timestamp), so we don't trigger
+          # a redeploy four times a day for nothing.
+          other=$(git diff --cached --name-only | grep -vx 'portfolio.json' || true)
+          if [ -z "$other" ]; then
+            if python3 - <<'PY'
+          import json, subprocess, sys
+          old = json.loads(subprocess.check_output(["git", "show", "HEAD:portfolio.json"]))
+          new = json.load(open("portfolio.json"))
+          sys.exit(0 if old.get("projects") == new.get("projects") else 1)
+          PY
+            then
+              echo "Only the timestamp changed. Skipping."
+              git reset --hard HEAD
+              exit 0
+            fi
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh Behance projects"
+          git push
