@@ -1,0 +1,99 @@
+Kym Gfx local brand icons
+Retrieved 2026-10-08. Geometry is preserved from the source SVGs.
+Monochrome fills use currentColor for consistent accessible UI styling.
+These marks identify the tools and social platforms; they imply no affiliation.
+
+Simple Icons: https://github.com/simple-icons/simple-icons
+License: CC0 1.0 Universal: https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md
+Brand names and logos remain trademarks of their respective owners.
+Legacy releases are used for OpenAI/ChatGPT, LinkedIn, and Adobe marks absent from the current repository.
+
+Manus: official transparent black glyph from https://events.manus.im/brand
+The official brand page makes these assets available for representing Manus.
+No separate open-source license is assumed for the Manus trademark.
+
+behance.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/behance.svg
+Downloaded source SHA-256: dec87682675f3c005dd98700294d5101b641a093f8ba7916df7d327e083f1be0
+viewBox: 0 0 24 24
+
+instagram.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/instagram.svg
+Downloaded source SHA-256: f53af2d1fc5292ba1433b5c1faf50005ce6a997fa302d1816989929f379a59dc
+viewBox: 0 0 24 24
+
+telegram.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/telegram.svg
+Downloaded source SHA-256: 147fd8f8923e7e5f463fe98c0eb9913bead6b2ae59935728cda141002ec8a7c9
+viewBox: 0 0 24 24
+
+claude.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/claude.svg
+Downloaded source SHA-256: 2d6fda79eb18ddccca35b799eeb3cece0dfabc22520ce3b10abd25668df9fa93
+viewBox: 0 0 24 24
+
+googlegemini.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/googlegemini.svg
+Downloaded source SHA-256: a6228d8846040401e941a39ed17459785e8324dbb7b870ce84233c9b3e9863a0
+viewBox: 0 0 24 24
+
+figma.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/figma.svg
+Downloaded source SHA-256: 2f86fca501dfed321a62f28743f29d9dd738dac91668eac5260ab746d1ef8840
+viewBox: 0 0 24 24
+
+framer.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/framer.svg
+Downloaded source SHA-256: c6c80c9ba890e199e94d35340fb4cf2d5790f339d9846800d68283e3e58e6031
+viewBox: 0 0 24 24
+
+wordpress.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/wordpress.svg
+Downloaded source SHA-256: 8877151b8978c3c961d16659ba28603a4015872e79fbbb770d09b68b0da8a4ff
+viewBox: 0 0 24 24
+
+googlemeet.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/googlemeet.svg
+Downloaded source SHA-256: ae7adb7a21d438caca54f88c2b864975893017eab16f4c0a4746c07b4cf24c74
+viewBox: 0 0 24 24
+
+zoom.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/zoom.svg
+Downloaded source SHA-256: da5b2f13d38ca61c88a227f58e3bebcbcbb55412d97678ecff49ae7c603f9a7b
+viewBox: 0 0 24 24
+
+chatgpt.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/14.15.0/icons/openai.svg
+Downloaded source SHA-256: 2b4a04ddc2395b20d168694d3850ce2050a702c4a0cdeb4d8b31b9a970481a8c
+viewBox: 0 0 24 24
+
+linkedin.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/13.21.0/icons/linkedin.svg
+Downloaded source SHA-256: 2687ac468d96bd03e748dc8646ef6465cb4cc7f34b96e1d0bc86fcb3dd79121a
+viewBox: 0 0 24 24
+
+adobephotoshop.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobephotoshop.svg
+Downloaded source SHA-256: 11f791a18f274a494148fa2b2b04b81e4cb21561537ce5ac0af38ec8fdce97c1
+viewBox: 0 0 24 24
+
+adobeillustrator.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobeillustrator.svg
+Downloaded source SHA-256: f6bfd1f6662f2db4d8047406fd93ffb8d262b20b74ec83999d0d5c64c122177d
+viewBox: 0 0 24 24
+
+adobeaftereffects.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobeaftereffects.svg
+Downloaded source SHA-256: ccd2af60b2d926939f1f39d21f4798dbafdba61258754aef31547517ffaa3412
+viewBox: 0 0 24 24
+
+adobepremierepro.svg
+Source: https://raw.githubusercontent.com/simple-icons/simple-icons/11.15.0/icons/adobepremierepro.svg
+Downloaded source SHA-256: 99b48567deeb7f54d95d5d3e7cb8b9394f3fdabc2fa7845fff377f80c2c975db
+viewBox: 0 0 24 24
+
+manus.svg
+Source: https://files.manuscdn.com/assets/image/brand/image/Manus-Glyph-Black.svg
+Downloaded source SHA-256: db3a1852c7be2b3e5773e8828f846c8938fbcfafcc9f9ec0df1734120f77a9b4
+viewBox: 0 0 60 60
+
