@@ -1,0 +1,4 @@
+# Ready-made static files: no build/install command is required.
+[build]
+  publish = "."
+
