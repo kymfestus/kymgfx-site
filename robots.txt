@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /tools/
 Disallow: /deployment/
+Sitemap: https://kymgfx.kymfestus.workers.dev/sitemap.xml
