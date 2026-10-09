@@ -1,0 +1,10 @@
+.github
+tools
+deployment
+README.md
+SHA256SUMS.txt
+wrangler.jsonc
+.assetsignore
+.gitignore
+netlify.toml
+vercel.json
