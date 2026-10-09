@@ -1,0 +1,52 @@
+name: Refresh and deploy Kym Gfx
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kym-gfx-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+      - name: Refresh public portfolio
+        run: python3 tools/refresh-behance.py
+      - name: Configure final URL and verify
+        env:
+          KYM_PUBLIC_URL: ${{ steps.pages.outputs.base_url }}
+        run: |
+          python3 tools/configure-site.py --url "$KYM_PUBLIC_URL"
+          python3 tools/check-site.py
+      - name: Package web files only
+        run: python3 tools/package-site.py --output _site
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
