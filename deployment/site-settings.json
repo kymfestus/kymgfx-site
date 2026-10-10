@@ -1,5 +1,6 @@
 {
-  "siteUrl": null,
+  "siteUrl": "https://kymgfx.kymfestus.workers.dev",
+  "cleanUrls": false,
   "email": "kymfestus@gmail.com",
   "behanceProfile": "https://www.behance.net/kymgfx0"
 }
