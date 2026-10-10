@@ -17,7 +17,7 @@
       if (typeof p.id !== 'string' || typeof p.url !== 'string' || typeof p.cover !== 'string') return false;
       const link = /^https:\/\/www\.behance\.net\/gallery\/(\d{5,12})\/[a-zA-Z0-9_-]+$/.exec(p.url);
       const cover = /^assets\/behance\/(\d{5,12})-[a-f0-9]{16}\.(?:png|jpg|webp)$/.exec(p.cover);
-      return link?.[1] === p.id && cover?.[1] === p.id && typeof p.title === 'string' && p.title.length > 0 && p.title.length <= 200 && !/[\u0000-\u001f\u007f]/.test(p.title) && Number.isSafeInteger(p.publishedOn) && p.publishedOn >= 946684800 && p.publishedOn <= 4102444800;
+      return link?.[1] === p.id && cover?.[1] === p.id && (p.displayTitle === undefined || (typeof p.displayTitle === 'string' && p.displayTitle.length <= 200 && !/[\u0000-\u001f\u007f]/.test(p.displayTitle))) && typeof p.title === 'string' && p.title.length > 0 && p.title.length <= 200 && !/[\u0000-\u001f\u007f]/.test(p.title) && Number.isSafeInteger(p.publishedOn) && p.publishedOn >= 946684800 && p.publishedOn <= 4102444800;
     };
     if (!data.projects.every(valid) || new Set(data.projects.map(p => p.id)).size !== data.projects.length) return;
     const projects = data.projects.filter(p => !curated.has(p.id)).sort((a, b) => b.publishedOn - a.publishedOn || Number(b.id) - Number(a.id)).slice(0, 3);
@@ -32,13 +32,14 @@
       const type = category(project.title), article = make('article', 'project-card fresh-project-card');
       article.dataset.category = type;
       const link = make('a', 'project-link'); link.href = project.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
-      link.setAttribute('aria-label', project.title + ' — view full project on Behance');
+      const shown = project.displayTitle || project.title;
+      link.setAttribute('aria-label', shown + ': view full project on Behance');
       const picture = make('div', 'project-image image-live'), image = make('img');
-      image.src = project.cover; image.alt = project.title + ' by Kym Gfx'; image.width = 404; image.height = 316; image.loading = 'lazy';
+      image.src = project.cover; image.alt = shown + ' by Kym Gfx'; image.width = 404; image.height = 316; image.loading = 'lazy';
       image.addEventListener('error', () => { image.hidden = true; picture.classList.add('cover-unavailable'); });
       picture.append(image, make('span', 'project-type', labels[type]), make('span', 'fresh-badge', 'Featured'));
       const meta = make('div', 'project-meta'), copy = make('div');
-      copy.append(make('h3', '', project.title), make('p', '', 'View the full project on Behance.'));
+      copy.append(make('h3', '', shown), make('p', '', labels[type] + '. View the full project on Behance.'));
       meta.append(copy, make('span', 'project-number', 'NEW')); link.append(picture, meta); article.append(link); nodes.push(article);
     });
     grid.querySelectorAll('.fresh-work-intro, .fresh-project-card').forEach(node => node.remove());

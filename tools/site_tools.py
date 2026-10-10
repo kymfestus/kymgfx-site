@@ -5,9 +5,9 @@ from html import escape
 import base64, hashlib, json, os, re, tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ('index.html', 'book.html', 'testimonials.html', '404.html')
+PAGES = ('index.html', 'book.html', 'onboarding.html', '404.html')
 FILES = (*PAGES, 'styles.css', 'app.js', 'forms.js', 'hover.js', 'motion.js',
-         'navigation.js', 'portfolio.js', 'portfolio.json', 'favicon.svg',
+         'navigation.js', 'portfolio.js', 'tally.js', 'portfolio.json', 'portfolio-overrides.json', 'favicon.svg',
          '_headers', 'robots.txt', 'sitemap.xml', '.nojekyll', 'netlify.toml', 'vercel.json')
 START = '<!-- KYM FEATURED START -->'
 END = '<!-- KYM FEATURED END -->'
@@ -31,6 +31,29 @@ def atomic_write(path, raw):
 def digest(raw, kind='sha256'):
     return kind + '-' + base64.b64encode(hashlib.new(kind, raw).digest()).decode()
 
+
+ACRONYMS = {'AI': 'AI', 'UI': 'UI', 'UX': 'UX', '3D': '3D', 'DJ': 'DJ', 'TV': 'TV', 'GTI': 'GTI', 'SAAS': 'SaaS', 'VS': 'vs'}
+SMALL = {'a', 'an', 'and', 'at', 'for', 'in', 'of', 'on', 'or', 'the', 'to'}
+
+def load_overrides(root=ROOT):
+    path = Path(root) / 'portfolio-overrides.json'
+    if not path.is_file(): return {}
+    data = json.loads(path.read_text(encoding='utf-8'))
+    return {k: v for k, v in data.items() if isinstance(v, dict) and re.fullmatch(r'\d{5,12}', k)}
+
+def display_title(project, overrides=None):
+    """Readable title: an explicit override wins; all-caps Behance titles become Title Case."""
+    title = (overrides or {}).get(project['id'], {}).get('title') or project['title']
+    title = re.sub(r'[\x00-\x1f\x7f]', ' ', title).strip()[:200]
+    if title.isupper() and len(title) > 3:
+        words = []
+        for index, word in enumerate(title.split()):
+            if word in ACRONYMS: words.append(ACRONYMS[word])
+            elif index and word.lower() in SMALL: words.append(word.lower())
+            else: words.append(word.capitalize())
+        title = ' '.join(words)
+    return title
+
 def safe_project(p):
     if not isinstance(p, dict): return False
     ident, title, cover, url = (p.get(k) for k in ('id', 'title', 'cover', 'url'))
@@ -49,7 +72,7 @@ def category(title):
     if re.search(r'poster|flyer|game day|frenzy|campaign|event', title, re.I): return 'campaign', 'Poster & campaign design'
     return 'other', 'Visual design'
 
-def featured_html(html, projects):
+def featured_html(html, projects, overrides=None):
     if html.count(START) != 1 or html.count(END) != 1: raise ValueError('Featured markers missing or duplicated')
     outside = re.sub(re.escape(START) + r'.*?' + re.escape(END), '', html, flags=re.S)
     curated = set(re.findall(r'<a\b(?=[^>]*\bdata-project=)[^>]*href="https://www\.behance\.net/gallery/(\d{5,12})/', outside))
@@ -60,8 +83,9 @@ def featured_html(html, projects):
         parts.append('<div class="fresh-work-intro"><span class="eyebrow">FRESH FROM BEHANCE</span><h3>New ideas, just landed.</h3></div>')
     for p in selected:
         kind, label = category(p['title'])
-        title, url, cover = (escape(p[k], quote=True) for k in ('title', 'url', 'cover'))
-        parts.append(f'<article class="project-card fresh-project-card" data-category="{kind}"><a class="project-link" href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{title} — view full project on Behance"><div class="project-image image-live"><img src="{cover}" alt="{title} by Kym Gfx" width="404" height="316" loading="lazy"><span class="project-type">{label}</span><span class="fresh-badge">Featured</span></div><div class="project-meta"><div><h3>{title}</h3><p>View the full project on Behance.</p></div><span class="project-number">NEW</span></div></a></article>')
+        title = escape(p.get('displayTitle') or display_title(p, overrides), quote=True)
+        url, cover = (escape(p[k], quote=True) for k in ('url', 'cover'))
+        parts.append(f'<article class="project-card fresh-project-card" data-category="{kind}"><a class="project-link" href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{title} — view full project on Behance"><div class="project-image image-live"><img src="{cover}" alt="{title} by Kym Gfx" width="404" height="316" loading="lazy"><span class="project-type">{label}</span><span class="fresh-badge">Featured</span></div><div class="project-meta"><div><h3>{title}</h3><p>{escape(label)}. View the full project on Behance.</p></div><span class="project-number">NEW</span></div></a></article>')
     rendered = re.sub(re.escape(START) + r'.*?' + re.escape(END),
                       lambda _: START + '\n' + '\n'.join(parts) + '\n' + END, html, flags=re.S)
     count = len(re.findall(r'<article\b[^>]*class="[^\"]*\bproject-card\b', rendered))
@@ -85,9 +109,10 @@ def stamp_html(html, root):
         return tag[:point] + ' integrity="' + digest(raw, 'sha384') + '" crossorigin="anonymous"' + tag[point:]
     html = re.sub(r'<link\b[^>]*rel="stylesheet"[^>]*>|<script\b[^>]*src="[^"?]+\.js(?:\?[^"\s]*)?"[^>]*></script>', stamp, html)
     hashes = ' '.join("'" + digest(t.encode()) + "'" for t in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S))
+    frame = "frame-src https://tally.so" if '<iframe' in html else "frame-src 'none'"
     policy = ("default-src 'none'; script-src 'self' " + hashes + "; style-src 'self'; img-src 'self' data:; "
               "media-src 'self' data:; font-src 'self' data:; script-src-attr 'none'; style-src-attr 'none'; "
-              "connect-src 'self'; object-src 'none'; base-uri 'none'; form-action mailto:; frame-src 'none'; "
+              "connect-src 'self'; object-src 'none'; base-uri 'none'; form-action mailto:; " + frame + "; "
               "worker-src 'none'; manifest-src 'none'")
     return re.sub(r'<meta http-equiv="Content-Security-Policy" content="[^"]+">',
                   lambda _: '<meta http-equiv="Content-Security-Policy" content="' + policy + '">', html)
@@ -104,7 +129,7 @@ def save_snapshot(root, state):
     if not all(safe_project(p) and (root / p['cover']).is_file() for p in projects): raise ValueError('Invalid project or missing cover')
     if len({p['id'] for p in projects}) != len(projects): raise ValueError('Duplicate project')
     index = root / 'index.html'; old_index = index.read_bytes()
-    rendered = stamp_html(featured_html(old_index.decode('utf-8'), projects), root)
+    rendered = stamp_html(featured_html(old_index.decode('utf-8'), projects, load_overrides(root)), root)
     raw = json.dumps(state, ensure_ascii=False, indent=2) + '\n'
     snapshot = root / 'portfolio.json'; old_snapshot = snapshot.read_bytes() if snapshot.exists() else None
     atomic_write(snapshot, raw)

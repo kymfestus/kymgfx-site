@@ -3,7 +3,7 @@
 import argparse, datetime, email.utils, hashlib, json, re, time, urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from site_tools import ROOT, FEED, PROFILE, atomic_write, save_snapshot
+from site_tools import ROOT, FEED, PROFILE, atomic_write, save_snapshot, load_overrides, display_title
 
 MAX_XML = 1_000_000
 MAX_IMAGE = 2_000_000
@@ -60,8 +60,10 @@ def refresh(root=ROOT, fetcher=read):
         raw = fetcher(p['coverSource'], MAX_IMAGE); ext = raster_ext(raw)
         p['cover'] = 'assets/behance/' + p['id'] + '-' + hashlib.sha256(raw).hexdigest()[:16] + '.' + ext
         downloads.append((root / p['cover'], raw))
+    overrides = load_overrides(root)
+    for p in projects: p['displayTitle'] = display_title(p, overrides)
     stamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
-    signature = lambda ps: [(p['id'], p['title'], p['url'], p['cover'], p['publishedOn']) for p in ps]
+    signature = lambda ps: [(p['id'], p['title'], p.get('displayTitle', p['title']), p['url'], p['cover'], p['publishedOn']) for p in ps]
     changed = signature(projects) != signature(previous['projects'])
     for path, raw in downloads:
         if not path.exists(): atomic_write(path, raw)
@@ -69,7 +71,10 @@ def refresh(root=ROOT, fetcher=read):
     state = {'profileUrl': PROFILE, 'checkedAt': stamp, 'updatedAt': stamp if changed else previous.get('updatedAt', stamp), 'projects': projects}
     save_snapshot(root, state)
     old_ids = {p['id'] for p in previous['projects']}
-    return {'status': 'updated' if changed else 'unchanged', 'projectCount': len(projects), 'newProjects': [p['title'] for p in projects if p['id'] not in old_ids], 'checkedAt': stamp}
+    seen = {}
+    for p in projects: seen.setdefault(p['displayTitle'].casefold(), []).append(p['id'])
+    duplicates = sorted(i for ids in seen.values() if len(ids) > 1 for i in ids)
+    return {'warnings': ['Projects share a title; add a title to portfolio-overrides.json: ' + ', '.join(duplicates)] if duplicates else [], 'status': 'updated' if changed else 'unchanged', 'projectCount': len(projects), 'newProjects': [p['title'] for p in projects if p['id'] not in old_ids], 'checkedAt': stamp}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

@@ -22,20 +22,20 @@ On Windows, use `py -3` instead of `python3` if that is your Python launcher. Th
 | --- | --- |
 | `index.html` | Home, projects, services, about, FAQs and contact |
 | `book.html` | Reviewed Google Meet / Zoom call request |
-| `testimonials.html` | Labeled sample testimonials and feedback form |
+| `onboarding.html` | Client onboarding page with the embedded Tally form |
 | `404.html` | Missing-page screen |
 | `assets/` | Your supplied portrait, portfolio media, Safari video, local fonts, real icons and licenses |
 | `portfolio.json`, `assets/behance/` | All 12 saved public Behance projects and their local cover images |
-| `styles.css`, `*.js` | Editable styling, motion, navigation, forms and project previews |
+| `styles.css`, `*.js` | Editable styling, motion, navigation, Tally embeds and project previews |
 | `_headers`, `netlify.toml`, `vercel.json` | Static hosting and security configuration |
 | `tools/` | Domain setup, safe Behance refresh, verification and deployment packaging |
 | `deployment/` | Hosting guides, optional refresh workflow, server header examples and export notes |
 
 The six curated projects remain in place. The three newest public projects outside that selection are rendered directly in the home-page HTML, so featured work remains visible if the JSON request fails or JavaScript is unavailable. Core images, fonts, icons and the included video are local. Project links and full collections still open Behance; onboarding opens your Tally form.
 
-## Booking and forms
+## Forms (Tally)
 
-The destination is **kymfestus@gmail.com**. Contact, booking and feedback forms create an email draft. The visitor must send it in their email app. Booking includes a preferred date, time, timezone and Google Meet/Zoom choice, followed by a review step. You confirm availability by email and send the actual meeting link. There is no automatic calendar reservation or meeting creation. The Tally onboarding URL remains `https://tally.so/r/5BREPb`.
+All forms are embedded from Tally (tally.so), so submissions reach you by email without a visitor needing a mail app. Project inquiry: `VLRzQl` (home page). Discovery call request: `jadl69` (`book.html`). Client onboarding: `5BREPb` (`onboarding.html`). Change the questions in Tally; the site picks the changes up automatically. The booking form is a request only: you confirm a time and send the Meet or Zoom link by email.
 
 ## Keep Behance work current
 
@@ -69,4 +69,4 @@ The existing hosted Site and its owner-private access settings are unchanged. Ex
 
 Page metadata, service/person structured data and direct-answer FAQs are retained. Run the domain tool to set canonical and sharing URLs, absolute structured-data identifiers and `sitemap.xml` for your chosen domain. No guessed public domain or old private-site canonical is shipped. Public indexing requires public access; SEO/AEO placement is not guaranteed.
 
-Testimonials remain labeled **“Sample testimonial · client approval required”** until replaced with approved client quotes. Functional, link, asset, metadata and security checks are documented in [deployment/EXPORT-NOTES.md](deployment/EXPORT-NOTES.md). Physical-phone rendering and exact visual parity with the reference remain unverified.
+Testimonials were removed until approved client quotes are available.
