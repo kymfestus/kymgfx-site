@@ -35,7 +35,7 @@ The six curated projects remain in place. The three newest public projects outsi
 
 ## Forms (Tally)
 
-Two forms are embedded from Tally (tally.so), so submissions reach you by email without a visitor needing a mail app. Start a project (includes package pricing): `5BREPb` (`start.html`). Discovery call request: `jadl69` (`book.html`). Change the questions in Tally; the site picks the changes up automatically. The booking form is a request only: you confirm a time and send the Meet or Zoom link by email.
+Two forms are embedded from Tally (tally.so), so submissions reach you by email without a visitor needing a mail app. Start a project (shows pricing ranges per service): `kd8j16` (`start.html`). Discovery call request: `jadl69` (`book.html`). Change the questions in Tally; the site picks the changes up automatically. The booking form is a request only: you confirm a time and send the Meet or Zoom link by email.
 
 ## Keep Behance work current
 
