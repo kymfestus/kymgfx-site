@@ -5,7 +5,7 @@ from html import escape
 import base64, hashlib, json, os, re, tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ('index.html', 'book.html', 'onboarding.html', '404.html')
+PAGES = ('index.html', 'book.html', 'start.html', '404.html')
 FILES = (*PAGES, 'styles.css', 'app.js', 'forms.js', 'hover.js', 'motion.js',
          'navigation.js', 'portfolio.js', 'tally.js', 'portfolio.json', 'portfolio-overrides.json', 'favicon.svg',
          '_headers', 'robots.txt', 'sitemap.xml', '.nojekyll', 'netlify.toml', 'vercel.json')

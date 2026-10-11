@@ -206,7 +206,7 @@ main{padding-top:88px}
 @media(prefers-reduced-motion:reduce){.marquee-track{animation:none}.service-marquee{overflow-x:auto;mask-image:none}.marquee-group[aria-hidden]{display:none}.booking-button{will-change:auto}.booking-button:active{transform:none}}
 
 /* Logo, footer links and embedded Tally forms */
-.header-logo{display:block;height:22px;width:auto;flex:none}
+.header-logo{display:block;height:26px;width:auto;flex:none}
 .footer-logo{display:inline-flex;align-items:center;line-height:0}
 .footer-logo img{display:block;height:32px;width:auto}
 .subpage-footer .footer-logo img{height:28px}
@@ -225,4 +225,10 @@ main{padding-top:88px}
 .onboarding-list li{margin:0 0 4px}
 .onboarding-notes p a{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
 @media(max-width:767px){.tally-card{padding:20px 14px 16px}.tally-frame{height:760px}.footer-links{gap:16px;flex-wrap:wrap}.subpage-footer .footer-links{order:3}.footer-logo img{height:28px}}
-@media(min-width:768px){.header-nav{max-width:470px}}
+@media(min-width:768px){.header-nav{max-width:410px}}
+
+.start-card{background:#f9f9f7;border-radius:20px;padding:36px;color:var(--ink)}
+.start-card .eyebrow{color:#6f786a}
+.start-card h3{font-size:32px;letter-spacing:-1.2px;line-height:1.08;margin:14px 0 14px;color:var(--ink)}
+.start-card p{font-size:14px;line-height:1.7;color:var(--body);margin:0 0 26px;max-width:46ch}
+@media(max-width:767px){.start-card{padding:26px}.start-card h3{font-size:27px}}

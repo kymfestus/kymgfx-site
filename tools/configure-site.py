@@ -7,7 +7,7 @@ from site_tools import ROOT, PAGES, atomic_write, stamp_pages
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--url', required=True, help='Final HTTPS site URL, e.g. https://kymgfx.com or https://you.github.io/portfolio')
-parser.add_argument('--clean-urls', action='store_true', help='Use /book and /testimonials in SEO URLs for hosts that strip .html')
+parser.add_argument('--clean-urls', action='store_true', help='Use /book and /start in SEO URLs for hosts that strip .html')
 args = parser.parse_args()
 url = args.url.rstrip('/')
 try:
@@ -42,7 +42,7 @@ for name in PAGES:
         html = re.sub(r'href="[^"]*styles\.css[^\"]*"', lambda _: f'href="{u.path}/styles.css"', html)
         html = re.sub(r'href="(?:/|index\.html)"', lambda _: f'href="{u.path}/"', html)
     atomic_write(path, html)
-pages = [url + '/', url + ('/book' if args.clean_urls else '/book.html'), url + ('/testimonials' if args.clean_urls else '/testimonials.html')]
+pages = [url + '/', url + ('/book' if args.clean_urls else '/book.html'), url + ('/start' if args.clean_urls else '/start.html')]
 atomic_write(ROOT / 'sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>' + escape(p) + '</loc></url>' for p in pages) + '</urlset>\n')
 atomic_write(ROOT / 'robots.txt', 'User-agent: *\nAllow: /\nDisallow: ' + u.path + '/tools/\nDisallow: ' + u.path + '/deployment/\nSitemap: ' + url + '/sitemap.xml\n')
 atomic_write(ROOT / 'deployment/site-settings.json', json.dumps({'siteUrl': url, 'cleanUrls': args.clean_urls, 'email': 'kymfestus@gmail.com', 'behanceProfile': 'https://www.behance.net/kymgfx0'}, indent=2) + '\n')

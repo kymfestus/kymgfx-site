@@ -22,7 +22,7 @@ On Windows, use `py -3` instead of `python3` if that is your Python launcher. Th
 | --- | --- |
 | `index.html` | Home, projects, services, about, FAQs and contact |
 | `book.html` | Reviewed Google Meet / Zoom call request |
-| `onboarding.html` | Client onboarding page with the embedded Tally form |
+| `start.html` | Start a project page with the embedded Tally project form |
 | `404.html` | Missing-page screen |
 | `assets/` | Your supplied portrait, portfolio media, Safari video, local fonts, real icons and licenses |
 | `portfolio.json`, `assets/behance/` | All 12 saved public Behance projects and their local cover images |
@@ -35,7 +35,7 @@ The six curated projects remain in place. The three newest public projects outsi
 
 ## Forms (Tally)
 
-All forms are embedded from Tally (tally.so), so submissions reach you by email without a visitor needing a mail app. Project inquiry: `VLRzQl` (home page). Discovery call request: `jadl69` (`book.html`). Client onboarding: `5BREPb` (`onboarding.html`). Change the questions in Tally; the site picks the changes up automatically. The booking form is a request only: you confirm a time and send the Meet or Zoom link by email.
+Two forms are embedded from Tally (tally.so), so submissions reach you by email without a visitor needing a mail app. Start a project (includes package pricing): `5BREPb` (`start.html`). Discovery call request: `jadl69` (`book.html`). Change the questions in Tally; the site picks the changes up automatically. The booking form is a request only: you confirm a time and send the Meet or Zoom link by email.
 
 ## Keep Behance work current
 

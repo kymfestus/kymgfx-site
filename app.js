@@ -89,7 +89,7 @@
   document.getElementById('copy-email')?.addEventListener('click', async () => {
     const label = document.getElementById('copy-email-label');
     try {await navigator.clipboard.writeText(email);label.textContent='Email copied';document.getElementById('copy-status').textContent='Email address copied to clipboard.';}
-    catch {label.textContent='Select email to copy';document.getElementById('copy-status').textContent='Clipboard is unavailable. Select the email address above to copy it.';}
+    catch {label.textContent='Use the email link';document.getElementById('copy-status').textContent='Clipboard is unavailable. Use the email link above to write to me.';}
   });
   document.querySelectorAll('[data-year]').forEach(element => { element.textContent = String(new Date().getFullYear()); });
 })();

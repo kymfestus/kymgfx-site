@@ -82,7 +82,7 @@ def check(root):
         import xml.etree.ElementTree as ET
         locs = ET.fromstring((root / 'sitemap.xml').read_bytes()).findall('{*}url/{*}loc')
         assert len(locs) == 3 and all(x.text.startswith('https://') and 'chatgpt.site' not in x.text for x in locs)
-    print(f'Checks passed: four pages, links/anchors, local assets/fonts, {len(state["projects"])} project covers, integrity, CSP/JSON-LD, labels, sample permissions and portable data.')
+    print(f'Checks passed: all pages, links/anchors, local assets/fonts, {len(state["projects"])} project covers, integrity, CSP/JSON-LD, labels, sample permissions and portable data.')
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__); p.add_argument('--stamp', action='store_true'); args = p.parse_args()
