@@ -25,7 +25,7 @@ def structured(node, page_url):
     if '@id' in result and '#' in result['@id']: result['@id'] = url + '/#' + result['@id'].split('#')[-1]
     kind = result.get('@type')
     if kind in ['Organization', 'WebSite']: result['url'] = url + '/'
-    if kind == 'Person': result.update(url=url + '/#about', image=url + '/assets/festus-kimani.png')
+    if kind == 'Person': result.update(url=url + '/#about', image=url + '/assets/festus-kimani.webp')
     if kind == 'WebPage': result['url'] = page_url
     return result
 

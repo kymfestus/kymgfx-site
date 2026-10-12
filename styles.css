@@ -244,3 +244,35 @@ main{padding-top:88px}
 .contact-dock .booking-button .button-portrait{display:block;width:36px;height:36px;border-radius:50%;object-fit:cover}
 /* With circular buttons the dock text stays put on hover instead of folding away. */
 .contact-dock:hover .dock-copy,.contact-dock:focus-within .dock-copy{max-width:138px;padding-right:10px;opacity:1}
+
+/* Readability: no micro-labels under 10px, stronger contrast, larger touch targets */
+.eyebrow{font-size:11px}
+.art-note{font-size:11px;color:#62645f}
+.art-card-label{font-size:10px}
+.filter{font-size:12px}
+.filter span{font-size:10px}
+.project-count{font-size:12px;color:#62645f}
+.project-number{font-size:11px;color:#6c6f67}
+.project-type,.fresh-badge{font-size:10px}
+.service-index{font-size:11px;color:#66705c}
+.service-item div>span{font-size:11px;color:#62645f}
+.service-cta{font-size:11px}
+.step-number{font-size:11px;color:#5d6657}
+.booking-steps li span{font-size:10px;color:#5d6a4f}
+.meeting-caption{color:#aab39c}
+.copy-email{font-size:12px}
+.start-card .eyebrow{color:#5d6657}
+.site-footer>span,.site-footer>span span,.subpage-footer>span,.subpage-footer>span span,.footer-links a{font-size:11px}
+@media(max-width:767px){
+  .menu-toggle{min-width:44px;min-height:44px;display:inline-grid;place-items:center}
+  .header-profile{min-height:44px;display:inline-flex;align-items:center}
+  .text-link,.work-footnote a,.email-link,.copy-email,.footer-links a,.footer-logo{display:inline-flex;align-items:center;min-height:44px}
+  .filter{min-height:44px}
+}
+.site-footer .footer-links a{color:#c1c8b5}
+@media(max-width:767px){
+  .email-link{display:flex}
+  .copy-email{display:flex;min-height:44px}
+  .site-footer>.footer-links{grid-row:1;grid-column:2;justify-self:end;justify-content:flex-end}
+  .site-footer>span:not(.footer-links){grid-row:2;grid-column:1/3}
+}
