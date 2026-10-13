@@ -35,7 +35,8 @@ for name in PAGES:
     page_url = url + ('/' if name == 'index.html' else '/' + (name.removesuffix('.html') if args.clean_urls else name))
     if name != '404.html':
         html = html.replace('</head>', f'<link rel="canonical" href="{page_url}"><meta property="og:url" content="{page_url}">\n</head>')
-    html = re.sub(r'<meta property="og:image"[^>]*>', lambda _: f'<meta property="og:image" content="{url}/assets/lisa-identity.webp">', html)
+    html = re.sub(r'<meta property="og:image:(?:width|height)"[^>]*>|<meta name="twitter:image"[^>]*>', '', html)
+    html = re.sub(r'<meta property="og:image"[^>]*>', lambda _: f'<meta property="og:image" content="{url}/assets/share.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:image" content="{url}/assets/share.png">', html)
     html = re.sub(r'<script type="application/ld\+json">(.*?)</script>',
                   lambda m: '<script type="application/ld+json">' + json.dumps(structured(json.loads(m[1]), page_url), ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + '</script>', html, flags=re.S)
     if name == '404.html':
