@@ -37,6 +37,13 @@ await t('non-api paths fall through to static assets', async () => {
   const r = await worker.fetch(new Request(HOST + '/index.html'), makeEnv());
   assert.equal(await r.text(), 'asset:/index.html');
 });
+await t('root path serves the home page from static assets', async () => {
+  const seen = []; const env = makeEnv(); const orig = env.ASSETS.fetch;
+  env.ASSETS.fetch = async (req) => { seen.push(new URL(req.url).pathname); return orig(req); };
+  const r = await worker.fetch(new Request(HOST + '/'), env);
+  assert.equal(await r.text(), 'asset:/index.html'); assert.deepEqual(seen, ['/index.html']);
+  assert.equal((await worker.fetch(new Request(HOST + '/', { method: 'POST' }), makeEnv())).status, 405);
+});
 await t('unknown /api path is 404 json', async () => {
   const r = await worker.fetch(new Request(HOST + '/api/other'), makeEnv());
   assert.equal(r.status, 404);

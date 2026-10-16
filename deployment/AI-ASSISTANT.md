@@ -4,7 +4,7 @@ Private notes. This folder is excluded from the public site by `.assetsignore`.
 
 ## What it is
 - `chat.js` + styles at the end of `styles.css`: the chat button in the contact dock and the chat panel.
-- `worker/index.mjs`: one endpoint, `POST /api/chat`, same origin only. Everything else is served as static files and never runs the Worker (`run_worker_first: ["/api/*"]` in `wrangler.jsonc`).
+- `worker/index.mjs`: one endpoint, `POST /api/chat`, same origin only. The Worker also answers `/` by serving `index.html`, because `html_handling: "none"` (kept so `/book.html` stays `/book.html`) gives the bare domain no file to match and it would 404 otherwise. Everything else is served as static files and never runs the Worker (`run_worker_first: ["/", "/api/*"]` in `wrangler.jsonc`).
 - `worker/knowledge.mjs`: the facts, prices and rules the assistant is allowed to use.
 - Model: Cloudflare Workers AI through the `AI` binding. No API key or secret exists anywhere.
 
@@ -34,6 +34,7 @@ If the build fails, open the failed build log first. The most likely culprit is 
 ## Tests (run from the repo root)
 - `node tools/test-chat-worker.mjs` : the Worker, with a mock AI.
 - `python3 tools/test-chat-ui.py` : the widget in a real browser with a mocked endpoint (needs Playwright).
+- `python3 tools/test-routes.py` : runs the site under Wrangler's real asset routing and checks `/`, every page, the 404 page, redirects, that private files are not public, and the API guards. Optional; needs Node (`WRANGLER=/path/to/wrangler` or it uses `npx wrangler`). Run it after any change to `wrangler.jsonc`, `_redirects` or `worker/`. A plain file server hides routing mistakes like the `/` one, so do not rely on it alone.
 - `python3 tools/check-site.py` : unchanged; run `--stamp` first after any edit.
 
 ## After deploying, try these by hand (real model, real answers)

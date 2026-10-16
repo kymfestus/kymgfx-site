@@ -110,6 +110,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // html_handling is "none" so that /book.html stays /book.html. The side effect is that
+    // the bare domain has no file to match, so we hand "/" the home page here.
+    if (url.pathname === '/') {
+      if (request.method !== 'GET' && request.method !== 'HEAD') return json({ error: 'method_not_allowed' }, 405, { Allow: 'GET, HEAD' });
+      return env.ASSETS.fetch(new Request(new URL('/index.html', url), request));
+    }
+
     if (url.pathname !== '/api/chat') {
       if (url.pathname.startsWith('/api/')) return json({ error: 'not_found' }, 404);
       return env.ASSETS.fetch(request);
