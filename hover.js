@@ -31,7 +31,7 @@
     // Keep keyboard and form behavior independent of animation support.
     const dock=doc.querySelector('.contact-dock');
     if(dock) {
-      const sync=()=>{dock.hidden=!!doc.activeElement?.matches('input,textarea,select');};
+      const sync=()=>{dock.hidden=!!doc.activeElement?.matches('input,textarea,select')&&!doc.activeElement.closest('.chat-panel');};
       doc.addEventListener('focusin',sync);doc.addEventListener('focusout',()=>win.setTimeout(sync,0));
     }
     if (!win.Element?.prototype.animate || !win.IntersectionObserver) return;

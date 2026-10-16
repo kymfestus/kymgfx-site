@@ -39,3 +39,7 @@
 /tally.js
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+
+/chat.js
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
