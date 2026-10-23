@@ -3,7 +3,7 @@
 import argparse, datetime, email.utils, hashlib, json, re, time, urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from site_tools import ROOT, FEED, PROFILE, atomic_write, save_snapshot, load_overrides, display_title
+from site_tools import ROOT, FEED, PROFILE, atomic_write, save_snapshot, load_overrides, display_title, stamp_pages
 
 MAX_XML = 1_000_000
 MAX_IMAGE = 2_000_000
@@ -32,7 +32,7 @@ def parse_feed(raw, now=None):
         title = re.sub(r'[\x00-\x1f\x7f]', ' ', item.findtext('title', '')).strip()
         url = item.findtext('link', '').strip()
         match = re.fullmatch(r'https://www\.behance\.net/gallery/(\d{5,12})/[A-Za-z0-9_-]+', url)
-        image = re.search(r'<img\s[^>]*\bsrc=[\'"]([^\'"]+)', item.findtext('description', ''), re.I)
+        image = re.search(r'<img\s[^>]*\bsrc=[\'\"]([^\'\"]+)', item.findtext('description', ''), re.I)
         stamp = email.utils.parsedate_to_datetime(item.findtext('pubDate', ''))
         if stamp.tzinfo is None: raise ValueError('Publication timezone required')
         published = int(stamp.timestamp())
@@ -40,7 +40,7 @@ def parse_feed(raw, now=None):
         ident = match[1]; source = image[1]; u = urlsplit(source)
         if ident in seen: raise ValueError('Duplicate project')
         seen.add(ident)
-        if u.scheme != 'https' or u.netloc != 'mir-s3-cdn-cf.behance.net' or u.query or u.fragment or not re.fullmatch(r'/projects/\d{2,4}/[A-Za-z0-9._-]+\.(png|jpe?g|webp)', u.path, re.I): raise ValueError('Untrusted cover source')
+        if u.scheme != 'https' or u.netloc != 'mir-s3-cdn-cf.behance.net' or u.query or u.fragment or not re.fullmatch(r'/projects/\d{2,4}/[A-Za-z0-9._-]+\.(png|jpe?g|webp)', u.path, re.I): raise ValueError('Invalid cover url')
         result.append({'id': ident, 'title': title, 'url': url, 'coverSource': source, 'publishedOn': published, 'publishedAt': datetime.datetime.fromtimestamp(published, datetime.timezone.utc).isoformat().replace('+00:00', 'Z')})
     return sorted(result, key=lambda p: (p['publishedOn'], int(p['id'])), reverse=True)
 
@@ -70,11 +70,14 @@ def refresh(root=ROOT, fetcher=read):
         elif path.read_bytes() != raw: raise ValueError('Cached image mismatch')
     state = {'profileUrl': PROFILE, 'checkedAt': stamp, 'updatedAt': stamp if changed else previous.get('updatedAt', stamp), 'projects': projects}
     save_snapshot(root, state)
+    # Regenerate asset integrity hashes for every generated page so the site
+    # validator matches the current JS/CSS files after a refresh.
+    stamp_pages(root)
     old_ids = {p['id'] for p in previous['projects']}
     seen = {}
     for p in projects: seen.setdefault(p['displayTitle'].casefold(), []).append(p['id'])
     duplicates = sorted(i for ids in seen.values() if len(ids) > 1 for i in ids)
-    return {'warnings': ['Projects share a title; add a title to portfolio-overrides.json: ' + ', '.join(duplicates)] if duplicates else [], 'status': 'updated' if changed else 'unchanged', 'projectCount': len(projects), 'newProjects': [p['title'] for p in projects if p['id'] not in old_ids], 'checkedAt': stamp}
+    return {'warnings': ['Projects share a title; add a title to portfolio-overrides.json: ' + ', '.join(duplicates)] if duplicates else [], 'status': 'updated' if changed else 'unchanged', 'projects': len(projects), 'updated_ids': [p['id'] for p in projects if p['id'] not in old_ids], 'removed_ids': [i for i in old_ids if i not in {p['id'] for p in projects}]}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
