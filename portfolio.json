@@ -1,8 +1,18 @@
 {
   "profileUrl": "https://www.behance.net/kymgfx0",
-  "checkedAt": "2026-10-09T18:32:27.662Z",
-  "updatedAt": "2026-10-08T22:14:41.015Z",
+  "checkedAt": "2026-10-26T09:39:08.086Z",
+  "updatedAt": "2026-10-26T09:39:08.086Z",
   "projects": [
+    {
+      "id": "257606957",
+      "title": "Spotify Motion Reel",
+      "url": "https://www.behance.net/gallery/257606957/Spotify-Motion-Reel",
+      "coverSource": "https://mir-s3-cdn-cf.behance.net/projects/404/c867ff257606957.Y3JvcCw4MDgsNjMyLDAsMA.png",
+      "publishedOn": 1792997925,
+      "publishedAt": "2026-10-26T06:58:45Z",
+      "cover": "assets/behance/257606957-69e0c35796e21e11.png",
+      "displayTitle": "Spotify Motion Reel"
+    },
     {
       "id": "256715563",
       "title": "GAME DAY EVENT FLYER",
@@ -112,16 +122,6 @@
       "publishedAt": "2026-08-10T12:46:34Z",
       "cover": "assets/behance/254067997-8b1b5e78b38aa0df.png",
       "displayTitle": "Vibe Check"
-    },
-    {
-      "id": "254067951",
-      "title": "UP ON A TUESDAY",
-      "url": "https://www.behance.net/gallery/254067951/UP-ON-A-TUESDAY",
-      "coverSource": "https://mir-s3-cdn-cf.behance.net/projects/404/25f8c0254067951.Y3JvcCw5OTksNzgyLDAsMTA4.png",
-      "publishedOn": 1786365904,
-      "publishedAt": "2026-08-10T12:45:04Z",
-      "cover": "assets/behance/254067951-7deed8e99fa971df.png",
-      "displayTitle": "Up on a Tuesday"
     }
   ]
 }
