@@ -9,13 +9,10 @@
   const STORE = 'kg-chat-v1';
   const MAX_STORED = 20;
   const MAX_SENT = 10;
-  // Privacy-first default: keep the conversation in memory only. Set to true to keep it in this
-  // tab's sessionStorage so it survives moving between pages (it is still cleared when the tab closes).
-  const PERSIST_CHAT = false;
   const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
   const GREETING = "Hi, I'm the Kym Gfx AI assistant. I can explain services and typical prices, help you shape a project brief, or point you to relevant work. What are you working on?";
-  const NOTE_TEXT = 'AI can make mistakes, and Kym confirms every quote. Your chat is not saved in your browser. Please do not share sensitive personal details here.';
+  const NOTE_TEXT = 'AI can make mistakes. Kym confirms every quote and detail. Please do not share sensitive personal details here.';
   const FALLBACK = "I can't reach the assistant right now. You can still send your project details through the project form, or request a discovery call, and Kym will reply.";
   const RATE_TEXT = "You're sending messages quickly. Give it a minute and try again.";
   const STARTERS = ['What does a logo cost?', 'Help me scope a project', 'Show me work like mine'];
@@ -46,10 +43,6 @@
   }
 
   function load() {
-    if (!PERSIST_CHAT) {
-      try { sessionStorage.removeItem(STORE); } catch (e) { /* storage can be unavailable */ }
-      return [];
-    }
     try {
       const raw = JSON.parse(sessionStorage.getItem(STORE) || '[]');
       if (!Array.isArray(raw)) return [];
@@ -63,7 +56,6 @@
     } catch (e) { return []; }
   }
   function save() {
-    if (!PERSIST_CHAT) return;
     try { sessionStorage.setItem(STORE, JSON.stringify(messages.slice(-MAX_STORED))); } catch (e) { /* storage can be unavailable */ }
   }
 
