@@ -1,16 +1,16 @@
 # Deploying Kym Gfx
 
-The ZIP is a static website export. Its root contains `index.html`. You may upload the whole extracted folder, or use `tools/package-site.py` to copy only web files. No backend server or Site-specific credentials are needed for the published pages.
+The ZIP is a static website export. Its root contains `index.html`. You may upload the whole extracted folder, or use `tools/package-site.py` to copy only web files. No backend server or Site-specific code is required.
 
 | Hosting option | Upload / settings | Security headers |
 | --- | --- | --- |
-| Netlify | Extract the ZIP; drag the folder containing `index.html` to [Netlify Drop](https://app.netlify.com/drop). For Git deployment, publish `.` with no build command; `netlify.toml` is included. | Keep `_headers` at the publish root. |
-| Cloudflare Pages | Choose Direct Upload and upload the ZIP or extracted folder. For a web-only upload, use `python3 tools/package-site.py --zip Kym-Gfx-Upload.zip`. Git builds can publish `.` without a build command. | Keep `_headers` at the publish root. |
-| Vercel | Use the extracted folder as the project root through Git import or the Vercel CLI. Framework preset: Other. No install/build command. Output directory: `.`. | The included `vercel.json` supplies the headers. |
-| cPanel / Apache shared hosting | Upload and extract the files into the domain's `public_html`, or another document root. Put `index.html` directly there. | Optional Apache example below. The host must permit `mod_headers` and `.htaccess` overrides. |
+| Netlify | Extract the ZIP; drag the folder containing `index.html` to [Netlify Drop](https://app.netlify.com/drop). For Git deployment, publish `.` with no build command; `netlify.toml` is included for a static publish. | Netlify serves the included headers after you connect the domain. |
+| Cloudflare Pages | Choose Direct Upload and upload the ZIP or extracted folder. For a web-only upload, use `python3 tools/package-site.py --zip Kym-Gfx-Upload.zip`. Git builds can publish `.` with no install/build command. | Cloudflare reads the included `_headers` file. |
+| Vercel | Use the extracted folder as the project root through Git import or the Vercel CLI. Framework preset: Other. No install/build command. Output directory: `.`. | The included `vercel.json` config adds the required security headers. |
+| cPanel / Apache shared hosting | Upload and extract the files into the domain's `public_html`, or another document root. Put `index.html` directly there. | Optional Apache example below. The host may support custom headers or require server-level rules. |
 | Nginx / VPS | Copy web files to your configured document root and enable HTTPS. | Merge `nginx-headers.conf` into your server configuration. |
-| GitHub Pages | Set Pages to GitHub Actions and use the supplied workflow template; it uploads only web files. Configure your domain or project URL. | GitHub Pages does not expose custom response-header configuration. Use a suitable CDN/proxy if these headers are required. HTML CSP and integrity remain present. |
-| Other static hosts | Publish the directory containing `index.html`, preserve file names/paths, and serve HTML/CSS/JS/JSON/images/fonts/video with correct MIME types. No build command. | Adapt the headers in `_headers` to the host's supported configuration. |
+| GitHub Pages | Set Pages to GitHub Actions and use the supplied workflow template; it uploads only web files. Configure your domain or project URL. | GitHub Pages does not expose custom response headers in the same way as a custom server, so keep the HTML CSP aligned. |
+| Other static hosts | Publish the directory containing `index.html`, preserve file names/paths, and serve HTML/CSS/JS/JSON/images/fonts/video with correct MIME types. No build command. | Adapt the supplied HTTP rules to your provider as needed. |
 
 Website builders with proprietary themes or CMS import formats may need their own integration; a static ZIP is not a WordPress theme or a Wix/Squarespace template.
 
@@ -41,7 +41,7 @@ Check the actual deployed response headers in browser developer tools or with `c
 
 ## Booking verification after deployment
 
-Open `/book.html`, select Google Meet and then Zoom, enter a future date/time with the correct timezone, and review the details. Edit a field and confirm the review resets. The final action should open an email draft to `kymfestus@gmail.com`; sending it remains the visitor's responsibility. Test with an email app configured on the device. You still confirm the time and provide the meeting link. Tally is an external onboarding service.
+Open `/book.html`, select Google Meet and then Zoom, enter a future date/time with the correct timezone, and review the details. Edit a field and confirm the review resets. The final action should open an email draft to `kymgfx@gmail.com`; sending it remains the visitor's responsibility. Test with an email app configured on the device. You still confirm the time and provide the meeting link. Tally is an external onboarding service.
 
 Check home-page media, each project preview, service filters, the responsive menu, portrait/social links, reduced-motion behavior and both feedback permissions. Use a real phone for the visual check that remains outstanding.
 

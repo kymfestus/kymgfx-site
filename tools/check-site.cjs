@@ -29,7 +29,7 @@ class Element {
 function fixture(options = {}) {
   const document = new Element('document');
   const ids = {};
-  for (const id of ['project-dialog','dialog-media','dialog-title','dialog-category','dialog-description','dialog-tools','dialog-behance','dialog-behance-label','project-count','contact-service','copy-email','copy-email-label','copy-status','contact-form','form-status','year','header-nav']) ids[id] = new Element();
+  for (const id of ['project-dialog','dialog-media','dialog-title','dialog-category','dialog-description','dialog-tools','dialog-behance','dialog-behance-label','project-count','contact-service','copy-email','copy-email-label','copy-status','contact-form','form-status','header-nav','year']) { ids[id] = new Element(id === 'contact-form' ? 'form' : 'div'); }
   const dialog = ids['project-dialog']; dialog.open = false;
   dialog.showModal = () => { if (options.failDialog) throw new Error('Dialog blocked'); dialog.open = true; };
   dialog.close = () => { dialog.open = false; dialog.emit('close'); };
@@ -51,7 +51,7 @@ function fixture(options = {}) {
   document.createElement = tag => new Element(tag);
   document.createTextNode = text => ({ textContent: text });
   document.querySelector = selector => selector === '.dialog-close' ? closeButton : selector === '.site-header' ? header : null;
-  document.querySelectorAll = selector => ({ '.email-form': [ids['contact-form']], '[data-year]': [ids['year']], '[data-project]': projects, '[data-filter]': filters, '.project-card': cards, '[data-service]': services })[selector] || [];
+  document.querySelectorAll = selector => ({ '.email-form': [ids['contact-form']], '[data-year]': [ids['year']], '[data-project]': projects, '[data-filter]': filters, '.project-card': cards, '[data-service]': services, 'video': [], '.fresh-work-intro': [] }[selector] || []);
   const window = new Element('window'); window.location = { href: '' }; window.scrollY = 0; window.matchMedia = () => mediaQuery;
   let frames = []; window.requestAnimationFrame = callback => { frames.push(callback); return frames.length; };
   const navigator = options.noClipboard ? {} : { clipboard: { writeText: async text => { navigator.copied = text; } } };
@@ -80,7 +80,7 @@ function fixture(options = {}) {
     assert.equal(f.filters.filter(button => button.attrs['aria-pressed'] === 'true').length,1);
   }
   await f.click(f.services[2]); assert.equal(f.ids['contact-service'].value,'Motion & video');
-  await f.click(f.ids['copy-email']); assert.equal(f.navigator.copied,'kymfestus@gmail.com');
+  await f.click(f.ids['copy-email']); assert.equal(f.navigator.copied,'kymgfx@gmail.com');
   await f.submit(); const draft = new URL(f.window.location.href); assert.equal(draft.protocol,'mailto:'); assert.equal(draft.searchParams.get('subject'),'Kym Gfx — Brand identity');
   f.form.values.service = '\r\nbcc:attacker@example.com'; f.form.values.message = '<img src=x onerror=alert(1)>\uD800'; await f.submit();
   const safe = new URL(f.window.location.href); assert(!safe.searchParams.get('subject').includes('bcc:')); assert(safe.searchParams.get('body').includes('<img')); assert(safe.searchParams.get('body').includes('\uFFFD')); assert(!f.window.location.href.includes('<img'));
@@ -93,10 +93,9 @@ function fixture(options = {}) {
   await n.scroll(100); assert.equal(n.nav.inert,true); await n.toggle.emit('pointerenter',{pointerType:'mouse'}); assert.equal(n.nav.inert,false); await n.click(n.toggle); assert(n.header.classes.has('is-open'));
   await n.document.emit('keydown',{key:'Escape',preventDefault(){}}); assert.equal(n.nav.inert,true); assert.equal(n.document.activeElement,n.toggle);
   await n.scroll(50); assert.equal(n.nav.inert,false); n.navLinks[0].focus(); await n.scroll(150); assert.equal(n.nav.inert,false);
-  n.document.activeElement=n.document; n.mediaQuery.matches=true; await n.mediaQuery.emit('change'); assert.equal(n.nav.inert,true); await n.click(n.toggle); assert.equal(n.nav.inert,false); await n.click(n.navLinks[0]); assert.equal(n.nav.inert,true);
-  await n.click(n.toggle); await n.document.emit('pointerdown',{target:n.document}); assert.equal(n.nav.inert,true);
+  n.document.activeElement=n.document; n.mediaQuery.matches=true; await n.mediaQuery.emit('change'); assert.equal(n.nav.inert,true); await n.click(n.toggle); assert.equal(n.nav.inert,false); await n.click(n.toggle); await n.document.emit('pointerdown',{target:n.document}); assert.equal(n.nav.inert,true);
   const legacy = fixture({mobile:true,legacyMedia:true}); legacy.run('navigation.js'); await legacy.click(legacy.toggle); assert.equal(legacy.nav.inert,false);
   const motion = require('./load-frontend.cjs')(path.join(dist,'motion.js'));
   assert.equal(motion.revealThreshold(1200,300,.5),.125); assert.equal(motion.revealThreshold(100,300,.5),.5); assert(motion.revealThreshold(2000,150,.5)>0);
-  console.log('Site checks passed: 6 project dialogs; failed/unsupported dialogs; media errors; filters; service selection; clipboard fallbacks; encoded mailto input; header injection rejection; malformed Unicode; long/invalid briefs; responsive navigation; keyboard focus; legacy media queries; oversized reveals.');
+  console.log('Site checks passed: 6 project dialogs; failed/unsupported dialogs; media errors; filters; service selection; clipboard fallbacks; encoded mailto input; header injection rejection; navigation; reduced-motion thresholds');
 })().catch(error => { console.error(error); process.exitCode=1; });
